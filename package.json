@@ -16,9 +16,11 @@
     "dotenv": "^16.3.1",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "ldapjs": "^3.0.7",
     "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "mssql": "^10.0.1",
+    "mysql2": "^3.9.7",
     "nodemailer": "^6.9.8",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
@@ -37,6 +39,7 @@
     "chai": "^4.3.10",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
+    "sequelize-cli": "^6.6.2",
     "supertest": "^6.3.3"
   }
 }

@@ -1,75 +1,60 @@
-import { generateToken } from "./jwt";
 const { sequelize } = require('../../sequelizeConfig')
 const { QueryTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-// export const LoginOAuth2 = (req, res) => {
-//   passport.use(new GoogleStrategy({
-//     clientID: GOOGLE_CLIENT_ID,
-//     clientSecret: GOOGLE_CLIENT_SECRET,
-//     callbackURL: "http://www.example.com/auth/google/callback"
-//   },
-//     function (accessToken, refreshToken, profile, cb) {
-//       User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//         return cb(err, user);
-//       });
-//     }
-//   ));
-// }
+const ldap = require('ldapjs');
 
+// const client = ldap.createClient({
+//     url: 'ldap://ldap.example.com:389' // Reemplaza con la URL y el puerto de tu servidor LDAP
+// });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export const Login = async (req, res) => {
-//   const { username, password } = req.body;
-//   try {
-//     const user = await model_usuario_sistema.findOne({ where: { username: username } });
-
-//     if (!user) {
-//       return res.status(404).json({ respuesta: 'Usuario no encontrado' });
+export const LoginLDAP = (req, res) => {
+    let user = req.body.user
+    let password = req.body.password
+    return res.status(200).json({ user, password })
+    client.bind(user, password, (error) => {
+        if (error) {
+            console.log('error')
+            return res.status(500).json({ response: 'Hubo un error', error })
+        } else {
+            return res.status(200).json({ response: 'Login Exitoso' })
+        }
+    })
+}
+// client.bind('cn=admin,dc=example,dc=com', 'password', (err) => {
+//     if (err) {
+//         console.error('Error al autenticar:', err);
+//         return;
 //     }
 
-//     const passwordMatch = await bcrypt.compare(password, user.password);
+//     console.log('Conectado correctamente al servidor LDAP');
 
-//     if (passwordMatch) {
-//       const roles = {
-//         1: 'administrador',
-//         2: 'supervisor',
-//         3: 'operador',
-//         4: 'administrativo',
-//         5: 'logistico',
-//         6: 'auditor',
-//         7: 'mantenimiento',
-//         8: 'instalador',
-//       };
+//     const opts = {
+//         filter: '(uid=john)', // Filtro de búsqueda, puedes ajustarlo según tus necesidades
+//         scope: 'sub'
+//     };
 
-//       let rol = roles[user.id_rol] || 'Rol no definido';
+//     client.search('dc=example,dc=com', opts, (err, res) => {
+//         if (err) {
+//             console.error('Error al realizar la búsqueda:', err);
+//             return;
+//         }
 
-//       const token = generateToken({ userId: user.id_usuario_sistema, rol, username: user.username });
-//       return res.status(200).json({ token });
+//         res.on('searchEntry', (entry) => {
+//             console.log('Resultado de búsqueda:', entry.object);
+//         });
 
-//     } else {
-//       return res.status(401).json({ respuesta: 'Contraseña incorrecta' });
-//     }
-//   } catch (error) {
-//     console.error(error)
-//     return res.status(500).json({ respuesta: 'Error en el servidor' });
-//   }
-// };
+//         res.on('error', (err) => {
+//             console.error('Error en la búsqueda:', err.message);
+//         });
+
+//         res.on('end', () => {
+//             console.log('Búsqueda completada');
+//             client.unbind();
+//         });
+//     });
+// });
+
+
+
 
